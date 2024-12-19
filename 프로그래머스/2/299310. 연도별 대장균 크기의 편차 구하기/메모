@@ -1,0 +1,24 @@
+FROM 부터 작성하기
+JOIN 구조 기억하기
+서브쿼리부터 생각해보기
+
+현재 테이블의 DIFFERENTIATION_DATE에서 연도별로 최대 대장균 크기(SIZE_OF_COLONY)를 뺀 값을 계산하려면 서브쿼리의 결과를 메인 쿼리와 비교해야 합니다. 이 경우, 서브쿼리 결과는 연도별 최대값을 제공하므로, 이를 메인 쿼리에서 JOIN하거나 WHERE 조건을 활용해 연도별로 비교하면 됩니다.
+
+방법:
+서브쿼리로 연도별 최대값을 구하고,
+메인 쿼리에서 SUBSTRING(DIFFERENTIATION_DATE, 1, 4)를 통해 연도를 추출하고,
+연도를 기준으로 서브쿼리 결과와 비교하여 대장균 크기(SIZE_OF_COLONY)의 편차를 계산합니다.
+
+설명:
+서브쿼리:
+
+SELECT SUBSTRING(DIFFERENTIATION_DATE, 1, 4) AS YEAR, MAX(SIZE_OF_COLONY) AS MAX_SIZE로 연도별 최대 대장균 크기를 구합니다.
+GROUP BY SUBSTRING(DIFFERENTIATION_DATE, 1, 4)로 연도별로 그룹화합니다.
+메인 쿼리:
+
+SUBSTRING(A.DIFFERENTIATION_DATE, 1, 4)로 각 대장균의 연도를 추출합니다.
+서브쿼리의 결과와 JOIN하여 연도별 최대 대장균 크기(MAX_SIZE)를 가져옵니다.
+MAX_SIZE - A.SIZE_OF_COLONY로 편차(YEAR_DEV)를 계산합니다.
+정렬:
+
+연도(YEAR) 오름차순으로 정렬하고, 같은 연도 내에서는 편차(YEAR_DEV)에 대해 오름차순 정렬합니다.
